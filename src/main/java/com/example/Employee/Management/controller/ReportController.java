@@ -18,14 +18,14 @@ public class ReportController {
     @GetMapping("/generate")
     public String generateReport(){
         ReportThread thread = new ReportThread(service);
-        thread.start(); // background me report generate
+        thread.start();                                                                 // background me report generate
         return " Report generation started in background. ";
     }
 }
 
 
 // if you can run heavy task in background in you service then  use Threads
-//Java me Thread ek separate execution path hota hai.
+//Java mai Thread ek separate execution path hta  hai.
 //Agar aap heavy task ko background me run karna chahte ho, to thread use karte ho.
 //User take instance response , and report generate in  background process  .
 
