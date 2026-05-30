@@ -26,7 +26,8 @@ public class EmployeeController {
         return  employeeService.getAll();
     }
 
-    @GetMapping(value = "/{id}", version = "1.0")
+//    version = "1.0"
+    @GetMapping(value = "/{id}")
     public Employee getById(@PathVariable Long id){
         return employeeService.getById(id);
     }
