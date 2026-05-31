@@ -15,7 +15,6 @@ public class ReportScheduler {
 
     }
 
-    
     @Scheduled(cron = "0 0 1 * * ?") //daily 1 AM
     public void generateDailyReport(){
         reportService.generateReport();

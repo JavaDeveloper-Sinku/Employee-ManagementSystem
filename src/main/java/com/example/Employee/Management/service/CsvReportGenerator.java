@@ -16,6 +16,7 @@ public class CsvReportGenerator {
     public String generateCsv(List<String> data) throws IOException{
 
         File directory = new File(REPORT_DIR);
+
         if (!directory.exists()){
             directory.mkdirs();  // folder auto create
 

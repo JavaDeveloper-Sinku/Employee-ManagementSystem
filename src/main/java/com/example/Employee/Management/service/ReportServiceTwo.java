@@ -16,13 +16,11 @@ public class ReportServiceTwo {
     private final ReportRepository reportRepository;
     private final CsvReportGenerator csvReportGenerator;
 
-    public ReportServiceTwo(ReportRepository reportRepository,
-                         CsvReportGenerator csvReportGenerator){
+    public ReportServiceTwo(ReportRepository reportRepository, CsvReportGenerator csvReportGenerator){
         this.reportRepository = reportRepository;
         this.csvReportGenerator = csvReportGenerator;
 
     }
-
 
     // there taskExecutor are  mean we config  limits off Thread POOl
     @Async("taskExecutor")

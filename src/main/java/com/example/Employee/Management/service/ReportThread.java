@@ -18,6 +18,7 @@ public class ReportThread extends Thread{
 
     public void run(){
         List<Employee> list = service.getAll();
+
         double totalSalary = list.stream().mapToDouble(Employee :: getSalary).sum();
         System.out.println("Total Employees: " + list.size());
         System.out.println("Total Salary: " + totalSalary);
