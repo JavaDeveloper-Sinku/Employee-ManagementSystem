@@ -24,10 +24,14 @@ public class ReportController {
 }
 
 
+//information section
+
 // if you can run heavy task in background in you service then  use Threads
 //Java mai Thread ek separate execution path hta  hai.
 //Agar aap heavy task ko background me run karna chahte ho, to thread use karte ho.
 //User take instance response , and report generate in  background process  .
+
+
 
 //
 //✅ Advantages

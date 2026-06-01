@@ -23,7 +23,7 @@ public class ReportAsyncController {
 
 }
 
-
+// information section
 //✅ Advantages
 //Spring manages threads (Thread pool)
 //Better performance
