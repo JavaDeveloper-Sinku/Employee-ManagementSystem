@@ -16,6 +16,7 @@ public class Report {
     private Long id;
     private String reportName;
     private String filePath;
+
     private LocalDateTime createdAt;
 
 }
