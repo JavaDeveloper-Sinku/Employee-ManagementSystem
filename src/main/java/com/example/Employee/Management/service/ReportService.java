@@ -19,6 +19,7 @@ public class ReportService {
     public void generateReport(){
         List<Employee> list = repository.findAll();
 
+
         double totalSalary = list.stream().mapToDouble(Employee::getSalary).sum();
 
         System.out.println("Total Employees : "+ list.size());
