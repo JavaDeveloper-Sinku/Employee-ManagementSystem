@@ -41,11 +41,27 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
 
+                        // Public APIs
                         .requestMatchers(
                                 "/api/auth/**"
                         )
                         .permitAll()
 
+                        //Swagger APIs
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
+                        )
+                        .permitAll()
+
+                        // Employee APIs protected
+                        .requestMatchers(
+                                "/api/employees/**"
+                        )
+                        .authenticated()
+
+
+                        // Everything else
                         .anyRequest()
                         .authenticated()
                 )
