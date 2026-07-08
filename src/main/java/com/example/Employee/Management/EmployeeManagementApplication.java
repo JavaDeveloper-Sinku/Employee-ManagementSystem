@@ -8,7 +8,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 public class EmployeeManagementApplication {
 
 	public static void main(String[] args) {
-
         SpringApplication.run(EmployeeManagementApplication.class, args);
 	}
 

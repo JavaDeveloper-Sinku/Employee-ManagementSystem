@@ -20,3 +20,4 @@ spring:
         format_sql: true
 
     open-in-view: false
+
