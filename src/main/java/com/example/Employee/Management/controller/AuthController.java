@@ -3,6 +3,7 @@ package com.example.Employee.Management.controller;
 import com.example.Employee.Management.dto.request.LoginRequest;
 import com.example.Employee.Management.dto.request.RegisterRequest;
 import com.example.Employee.Management.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(
+            @Valid
             @RequestBody RegisterRequest request
     ){
 
@@ -31,6 +33,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(
+            @Valid
             @RequestBody LoginRequest request
     ){
 

@@ -3,6 +3,7 @@ package com.example.Employee.Management.controller;
 import com.example.Employee.Management.dto.request.EmployeeRequest;
 import com.example.Employee.Management.dto.response.EmployeeResponse;
 import com.example.Employee.Management.service.EmployeeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class EmployeeController {
     // Create Employee
     @PostMapping
     public ResponseEntity<EmployeeResponse> createEmployee(
+            @Valid
             @RequestBody EmployeeRequest request
     ){
 
