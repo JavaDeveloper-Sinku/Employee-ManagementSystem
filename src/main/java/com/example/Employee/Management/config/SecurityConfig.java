@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
 
 
@@ -42,34 +44,25 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         // Public APIs
-                        .requestMatchers(
-                                "/api/auth/**"
-                        )
+                        .requestMatchers("/api/auth/login")
                         .permitAll()
 
                         //Swagger APIs
-                        .requestMatchers(
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**"
-                        )
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
                         .permitAll()
 
-                        // Employee APIs protected
-                        .requestMatchers(
-                                "/api/employees/**"
-                        )
+                        // Protected APIs
+                        .requestMatchers("/api/auth/register")
+                        .authenticated()
+
+                        .requestMatchers("/api/employees/**")
                         .authenticated()
 
 
-                        // Everything else
-                        .anyRequest()
-                        .authenticated()
+                        .anyRequest().authenticated()
                 )
 
-                .addFilterBefore(
-                        jwtAuthenticationFilter,
-                        UsernamePasswordAuthenticationFilter.class
-                );
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -77,10 +70,7 @@ public class SecurityConfig {
 
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration configuration
-    ) throws Exception {
-
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)throws Exception {
         return configuration.getAuthenticationManager();
     }
 
