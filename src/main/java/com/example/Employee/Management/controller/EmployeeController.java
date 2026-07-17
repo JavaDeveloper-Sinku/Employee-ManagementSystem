@@ -1,6 +1,7 @@
 package com.example.Employee.Management.controller;
 
 import com.example.Employee.Management.dto.request.EmployeeRequest;
+import com.example.Employee.Management.dto.response.ApiResponse;
 import com.example.Employee.Management.dto.response.EmployeeResponse;
 import com.example.Employee.Management.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -11,63 +12,72 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/employees")
 @RequiredArgsConstructor
 public class EmployeeController {
 
-
     private final EmployeeService employeeService;
-
-
 
     // Create Employee
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','HR')")
-    public ResponseEntity<EmployeeResponse> createEmployee(
+    public ResponseEntity<ApiResponse<EmployeeResponse>> createEmployee(
             @Valid
             @RequestBody EmployeeRequest request
-    ){
+    ) {
 
-        return new ResponseEntity<>(
-                employeeService.createEmployee(request),
-                HttpStatus.CREATED
-        );
+        EmployeeResponse employee = employeeService.createEmployee(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(
+                        ApiResponse.<EmployeeResponse>builder()
+                                .success(true)
+                                .message("Employee created successfully")
+                                .data(employee)
+                                .build()
+                );
     }
-
-
 
     // Get All Employees
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','HR')")
-    public ResponseEntity<Page<EmployeeResponse>> getAllEmployees(
+    public ResponseEntity<ApiResponse<Page<EmployeeResponse>>> getAllEmployees(
 
             @RequestParam(defaultValue = "0")
             int page,
+
             @RequestParam(defaultValue = "5")
             int size,
+
             @RequestParam(defaultValue = "id")
             String sortBy,
+
             @RequestParam(defaultValue = "asc")
             String sortDir
-    ){
+    ) {
 
-        return ResponseEntity.ok(
+        Page<EmployeeResponse> employees =
                 employeeService.getAllEmployees(
                         page,
                         size,
                         sortBy,
                         sortDir
-                )
+                );
+
+        return ResponseEntity.ok(
+                ApiResponse.<Page<EmployeeResponse>>builder()
+                        .success(true)
+                        .message("Employees fetched successfully")
+                        .data(employees)
+                        .build()
         );
     }
 
-
+    // Search Employees
     @GetMapping("/search")
     @PreAuthorize("hasAnyRole('ADMIN','HR')")
-    public ResponseEntity<Page<EmployeeResponse>> searchEmployees(
+    public ResponseEntity<ApiResponse<Page<EmployeeResponse>>> searchEmployees(
 
             @RequestParam String keyword,
 
@@ -84,39 +94,39 @@ public class EmployeeController {
             String sortDir
     ) {
 
-        return ResponseEntity.ok(
+        Page<EmployeeResponse> employees =
                 employeeService.searchEmployees(
                         keyword,
                         page,
                         size,
                         sortBy,
                         sortDir
-                )
+                );
+
+        return ResponseEntity.ok(
+                ApiResponse.<Page<EmployeeResponse>>builder()
+                        .success(true)
+                        .message("Employees fetched successfully")
+                        .data(employees)
+                        .build()
         );
     }
 
+    // Filter Employees
     @GetMapping("/filter")
     @PreAuthorize("hasAnyRole('ADMIN','HR')")
-    public ResponseEntity<Page<EmployeeResponse>> filterEmployees(
+    public ResponseEntity<ApiResponse<Page<EmployeeResponse>>> filterEmployees(
 
-            @RequestParam(required = false)
-            String department,
-            @RequestParam(required = false)
-            Double minSalary,
-            @RequestParam(required = false)
-            Double maxSalary,
-            @RequestParam(defaultValue = "0")
-            int page,
-            @RequestParam(defaultValue = "5")
-            int size,
-            @RequestParam(defaultValue = "id")
-            String sortBy,
-            @RequestParam(defaultValue = "asc")
-            String sortDir
+            @RequestParam(required = false) String department, @RequestParam(required = false) Double minSalary,
+            @RequestParam(required = false) Double maxSalary,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir
     ) {
 
-        return ResponseEntity.ok(
-                employeeService.filterEmployees(
+        Page<EmployeeResponse> employees = employeeService.
+                filterEmployees(
                         department,
                         minSalary,
                         maxSalary,
@@ -124,56 +134,70 @@ public class EmployeeController {
                         size,
                         sortBy,
                         sortDir
-                )
+                );
+
+        return ResponseEntity.ok(
+                ApiResponse.<Page<EmployeeResponse>>builder()
+                        .success(true)
+                        .message("Employees fetched successfully")
+                        .data(employees)
+                        .build()
         );
     }
-
-
 
     // Get Employee By Id
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','HR','EMPLOYEE')")
-    public ResponseEntity<EmployeeResponse> getEmployeeById(
-            @PathVariable Long id
-    ){
+    public ResponseEntity<ApiResponse<EmployeeResponse>> getEmployeeById(@PathVariable Long id
+    ) {
+
+        EmployeeResponse employee = employeeService.getEmployeeById(id);
 
         return ResponseEntity.ok(
-                employeeService.getEmployeeById(id)
+                ApiResponse.<EmployeeResponse>builder()
+                        .success(true)
+                        .message("Employee fetched successfully")
+                        .data(employee)
+                        .build()
         );
     }
-
-
-
 
     // Update Employee
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','HR')")
-    public ResponseEntity<EmployeeResponse> updateEmployee(
+    public ResponseEntity<ApiResponse<EmployeeResponse>> updateEmployee(
+
             @PathVariable Long id,
             @Valid
             @RequestBody EmployeeRequest request
-    ){
+    ) {
+
+        EmployeeResponse employee = employeeService.updateEmployee(id, request);
 
         return ResponseEntity.ok(
-                employeeService.updateEmployee(id, request)
+                ApiResponse.<EmployeeResponse>builder()
+                        .success(true)
+                        .message("Employee updated successfully")
+                        .data(employee)
+                        .build()
         );
     }
 
-
-
-
     // Delete Employee
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<String> deleteEmployee(
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<String>> deleteEmployee(
             @PathVariable Long id
-    ){
+    ) {
 
         employeeService.deleteEmployee(id);
 
         return ResponseEntity.ok(
-                "Employee deleted successfully"
+                ApiResponse.<String>builder()
+                        .success(true)
+                        .message("Employee deleted successfully")
+                        .data(null)
+                        .build()
         );
     }
-
 }
