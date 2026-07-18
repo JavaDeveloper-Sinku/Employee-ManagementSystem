@@ -44,11 +44,19 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         // Public APIs
-                        .requestMatchers("/api/auth/login")
+                        .requestMatchers("/api/auth/login",
+                                "/api/auth/register",
+                                "/api/auth/refresh")
                         .permitAll()
 
+                        .requestMatchers("/api/auth/logout")
+                        .authenticated()
+
+
                         //Swagger APIs
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**")
                         .permitAll()
 
                         // Protected APIs
@@ -59,7 +67,8 @@ public class SecurityConfig {
                         .authenticated()
 
 
-                        .anyRequest().authenticated()
+                        .anyRequest()
+                        .authenticated()
                 )
 
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

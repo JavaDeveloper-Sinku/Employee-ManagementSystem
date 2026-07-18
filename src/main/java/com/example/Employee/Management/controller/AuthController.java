@@ -1,13 +1,16 @@
 package com.example.Employee.Management.controller;
 
 import com.example.Employee.Management.dto.request.LoginRequest;
+import com.example.Employee.Management.dto.request.RefreshTokenRequest;
 import com.example.Employee.Management.dto.request.RegisterRequest;
 import com.example.Employee.Management.dto.response.ApiResponse;
+import com.example.Employee.Management.dto.response.AuthResponse;
 import com.example.Employee.Management.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,20 +37,52 @@ public class AuthController {
                         .build()
         );
     }
-
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<String>> login(
+    public ResponseEntity<ApiResponse<AuthResponse>> login(
             @Valid
             @RequestBody LoginRequest request
     ) {
 
-        String token = authService.login(request);
+        AuthResponse response = authService.login(request);
+
+        return ResponseEntity.ok(
+                ApiResponse.<AuthResponse>builder()
+                        .success(true)
+                        .message("Login successful")
+                        .data(response)
+                        .build()
+        );
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<ApiResponse<AuthResponse>> refreshToken(
+            @Valid
+            @RequestBody RefreshTokenRequest request
+    ) {
+
+        AuthResponse response = authService.refreshToken(request);
+
+        return ResponseEntity.ok(
+                ApiResponse.<AuthResponse>builder()
+                        .success(true)
+                        .message("Access token refreshed successfully")
+                        .data(response)
+                        .build()
+        );
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<String>> logout(
+            Authentication authentication
+    ) {
+
+        authService.logout(authentication.getName());
 
         return ResponseEntity.ok(
                 ApiResponse.<String>builder()
                         .success(true)
-                        .message("Login successful")
-                        .data(token)
+                        .message("Logout successful")
+                        .data("Refresh token deleted successfully")
                         .build()
         );
     }
