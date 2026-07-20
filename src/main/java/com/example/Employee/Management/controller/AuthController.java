@@ -86,4 +86,11 @@ public class AuthController {
                         .build()
         );
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> me(Authentication authentication) {
+        return ResponseEntity.ok(
+                authentication.getAuthorities()
+        );
+    }
 }

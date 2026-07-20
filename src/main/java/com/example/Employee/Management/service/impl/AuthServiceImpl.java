@@ -14,6 +14,7 @@ import com.example.Employee.Management.repository.UserRepository;
 import com.example.Employee.Management.service.AuthService;
 
 import com.example.Employee.Management.service.RefreshTokenService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -80,6 +81,7 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
+    @Transactional
     @Override
     public AuthResponse refreshToken(RefreshTokenRequest request) {
 

@@ -45,7 +45,6 @@ public class SecurityConfig {
 
                         // Public APIs
                         .requestMatchers("/api/auth/login",
-                                "/api/auth/register",
                                 "/api/auth/refresh")
                         .permitAll()
 

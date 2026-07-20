@@ -4,18 +4,25 @@ import com.example.Employee.Management.entity.RefreshToken;
 import com.example.Employee.Management.entity.User;
 import com.example.Employee.Management.repository.RefreshTokenRepository;
 import com.example.Employee.Management.service.RefreshTokenService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Ref;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Service
+@RequiredArgsConstructor
+@Transactional
 public class RefreshTokenServiceImpl implements RefreshTokenService {
 
-    private RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
 
     private static final long REFRESH_TOKEN_EXPIRY_DAYS = 7;
 
+    @Transactional
     @Override
     public RefreshToken createRefreshToken(User user) {
 
@@ -54,6 +61,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         return refreshToken;
     }
 
+    @Transactional
     @Override
     public void deleteRefreshToken(User user) {
         refreshTokenRepository.deleteByUser(user);
